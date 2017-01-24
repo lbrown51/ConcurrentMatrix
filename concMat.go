@@ -33,7 +33,7 @@ type Supervisor struct {
 func (sup Supervisor) newBlock() {
 	mat := Matrix{make([][]float64, 10)}
 	backRtr := make(chan Matrix)
-	blk := Block{1, mat, sup.rtr.in}
+	blk := Block{1, mat, sup.rtr.in, backRtr}
 	fmt.Println(blk)
 
 }

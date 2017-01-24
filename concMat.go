@@ -12,25 +12,36 @@ type Matrix struct {
 type Block struct {
 	id      int
 	weights Matrix
-	//in      chan Matrix
-	//out     chan Matrix
+	in      chan Matrix
+	out     chan Matrix
 }
 
 // Router takes in the output of some Block computation
 // The last column is probably how I'm gonna hold where each
 // incoming matrix goes
 type Router struct {
-	//in   chan Matrix
-	//outs map[int][10]chan Block
+	in   chan Matrix
+	outs [][]chan Block
 }
 
 // Supervisor tells Router what to do and
 // Creates new Blocks
 type Supervisor struct {
+	rtr Router
+}
+
+func (sup Supervisor) newBlock() {
+	mat := Matrix{make([][]float64, 10)}
+	backRtr := make(chan Matrix)
+	blk := Block{1, mat, sup.rtr.in}
+	fmt.Println(blk)
+
 }
 
 func main() {
-	mat := Matrix{[][]float64{{2.0, 2.0}, {1.0, 1.6}}}
-	blk := Block{1, mat}
-	fmt.Println(blk)
+
+	rtr := Router{make(chan Matrix), make([][]chan Block, 10)}
+	sup := Supervisor{rtr}
+	sup.newBlock()
+	fmt.Println(sup)
 }
